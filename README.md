@@ -1,3 +1,5 @@
+WARNING!!! this is not written pythonically in any way. will optimize in the future.
+
 pygame project with dots multiplying and killing each other
 It is a turn based game among all the dots.
 
