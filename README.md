@@ -1,7 +1,8 @@
-WARNING!!! this is not written pythonically in any way. will optimize in the future.
+pygame project with dots multiplying and killing each other.
+It is a turn based game among all the dots. 
+I Am currently studying machine learning, this will be a game for the AI to train in.
 
-pygame project with dots multiplying and killing each other
-It is a turn based game among all the dots.
+
 
 Every dot has the following properties
 health
@@ -28,6 +29,15 @@ all the options are chosen pseudo randomly.
 
 on every 500th turn for each dot it duplicates another dot that is on its team
 
-this goes on and on until there is only one team remaining... 
-well the game still goes on because i have been too lazy to put a win condition
-its still a work in progress, and more for learning :)
+this goes on and on until there is only one team remaining...
+
+Future features
+  -UI where you can adjust parameters such as , population, starting stats, trail(on or off), etc...
+  -Win conditions
+  
+Requirements
+  -python 3
+  -pygame
+  
+
+  
