@@ -1,10 +1,12 @@
+#imports
 import pygame
 import random
 from players import Player
 from items import Item
 from menus import Menu
 import math
-import numpy as np
+
+#globals
 Clock = pygame.time.Clock()
 background_colour = (0,0,0)
 gridSizeX = round(1920*.25)
@@ -18,15 +20,11 @@ pygame.display.flip()
 directionCharList = ["N","S","E","W","SW","SE","NW","NE"]
 firstMenu = ["MOVE","ATTACK","INVENTORY"]
 
-
-
-
-
-
 playerList = []
 
 #helpers
 
+#calculates ditance between two objs
 def calcDistance(obj1,obj2):
     obj1_X = obj1.getPosX()
     obj1_Y = obj1.getPosY()
@@ -35,6 +33,7 @@ def calcDistance(obj1,obj2):
     distance = math.sqrt(((obj1_X-obj2_X)**2)+((obj1_Y-obj2_Y)**2))
     return round(distance)
 
+#returns other players that are within range to attack
 def genAttackList(playerObj,playerList):
     attackList = []
     for i in playerList:
@@ -48,17 +47,16 @@ def genAttackList(playerObj,playerList):
     
     playerObj.setAttackList(attackList)
 
-def drawPoint(tileList,brush,x,y):
-    for i in tileList:
-        if i.getLocX() == x and i.getLocY() == y:
-            i.setSymbol(brush)
 
+
+#gen a random number
 def randomGen(beg,end):
     
     a = list(range(beg,end))
     random.shuffle(a)
     return a[random.randint(0,len(a)-1)]
-    
+
+#gen a list of unique random numbers
 def uniqueRandGen(beg,end,size):
     numCache = []
     while len(numCache) < size:
@@ -68,6 +66,7 @@ def uniqueRandGen(beg,end,size):
         numCache.append(a)
     return numCache
 
+#gen a list of unique coordinate pairs
 def uniqueCoords(beg,sizeX,sizeY,size):
     coordList = []
     compX = 0
@@ -80,9 +79,11 @@ def uniqueCoords(beg,sizeX,sizeY,size):
     print(coordList)
     return coordList
 
+#generate random RGB values returns as tupel
 def randomColors():
     return (random.randint(0,255),random.randint(0,255),random.randint(0,255))
-                
+
+#generates all the players
 def genPlayers(gridSizeX,gridSizeY, population, begStats):
     playerList = []
     coords = uniqueCoords(0,gridSizeX-1,gridSizeY-1,population)
@@ -108,38 +109,42 @@ def genPlayers(gridSizeX,gridSizeY, population, begStats):
 
     return playerList
 
-
+#generate items (stat boosters)
 def genItems(amount):
     a = [Item("No One", "Item " + str(i), 100, 100 , 100, "Item " + str(i)) for i in range(1,amount)]
     return a
 
+#generate a logical grid to be placed over pixels
 def genLogicalGrid(gridSizeX,gridSizeY):
     
     sizeX = range(gridSizeX)
     sizeY = range(gridSizeY)
     return [[str(i) for i in sizeY] for j in sizeX]
 
+#generate
 def genMenu(optList):
     return [Menu(i,i,i,i) for i in optList]
 
+#register item with an owner(player obj)
 def assignItem(playerObj, itemObj):
     playerObj.setInv(itemObj)
     itemObj.setOwner(playerObj)
 
+#turns object properties into a python dictionary
 def toDict(obj):
     return obj.__dict__
 
-def assignItem(playerObj, itemObj):
-    playerObj.setInv(itemObj)
-    itemObj.setOwner(playerObj)
-
+#print menu id of a menu obj
 def printObj(obj):
     
     print(obj.getMenuID())
 
+#prints objects in given object list
 def printObjs(objList):
     [printObj(i) for i in objList]
 
+
+#changes player obj position based on given direction, and steps(pixels)
 def movePlayer(playerObj, direction, steps):
     
     x = playerObj.getPosX()
@@ -168,10 +173,10 @@ def movePlayer(playerObj, direction, steps):
 
 
 
-
+#checks to see if the player objs hitpoints are <= 0 
 def deathCheck(playerList):
     playerList = playerList
-    print('popSize: ' + str(len(playerList)))
+    #print('popSize: ' + str(len(playerList)))
     for player in playerList:
         #print(player)
         if player.getHealth() <= 0:
@@ -185,6 +190,9 @@ def deathCheck(playerList):
             
             
     return playerList
+
+
+#levels up player object, increases stats
 
 def ding(playerObj):
     #if self.master == True:
@@ -204,7 +212,7 @@ def ding(playerObj):
         playerObj.speed += 5
 
         
-
+#handles the players choice, runs appropriate function
 def choiceHandler(choice,playerObj):
     
     
@@ -247,6 +255,7 @@ def choiceHandler(choice,playerObj):
 ##    if playerObj.turn % 250 == 0:
 ##        playerObj.ding()
 
+#prevents player from choosing to go out of bounds
 def possibleDirChoices(playerObj):
     Choices = []
     playerX = playerObj.getPosX()
@@ -271,13 +280,8 @@ def possibleDirChoices(playerObj):
         
     return Choices
 
-   
-    
 
-def toDict(obj):
-    return obj.__dict__
-
-
+#returns player obj sets it to parent objs team
 def addPlayer(parentObj):
     recruit = Player("Child of " + parentObj.name,
              parentObj.health,
@@ -298,11 +302,7 @@ def addPlayer(parentObj):
 
     return recruit
     
-
-
-    
-    
-
+#main game function
 def initGame(mapSizeX,mapSizeY,population,startingStats):
     logGrid = genLogicalGrid(mapSizeX,mapSizeY)
     playerList = genPlayers(mapSizeX,mapSizeY, population, startingStats)
@@ -369,4 +369,3 @@ def initGame(mapSizeX,mapSizeY,population,startingStats):
   
             
 initGame(gridSizeX,gridSizeY,pop,5)
-        
